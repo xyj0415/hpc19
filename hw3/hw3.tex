@@ -1,0 +1,41 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+
+\title{High Performance Computing Assignment 2}
+\author{Yijian Xie}
+\date{March 31, 2019}
+
+\begin{document}
+
+\maketitle
+The processor I use is i5-7267U @ 3.10GHz. It has 2 processors and 4 threads.
+
+\section{Approximating Special Functions Using Taylor Series \& Vectorization}
+    I implemented the AVX part of function \verb|sin4_intrin()|, and the result is shown below.
+
+    Reference time: 0.2998
+
+    Taylor time:    1.7684      Error: 6.927903e-12
+
+    Intrin time:    0.0027      Error: 6.927903e-12
+
+    The function \verb|sin4_intrin()| is about 100x faster than the \verb|sin()| function.
+
+    I also found there is an intrinsic function(\verb|_mm256_sin_pd()|) which can calculate sin($x$) directly, and a group of intrinsic functions that use 512-bit registers. However the architecture of my CPU does not support any of them, so I left these code (\verb|sin4_intrin2()|) commented out.
+
+\section{Parallel Scan in OpenMP}
+    I modified the \verb|scan_seq()| function so that $prefix\_sum[i] = \sum_{k=0}^{i}A[i]$ to match the description in the problem.
+
+    Thread=4:
+
+    sequential-scan = 0.434113s
+
+    parallel-scan   = 0.233390s
+
+    Thread=2:
+
+    sequential-scan = 0.416888s
+    
+    parallel-scan   = 0.293155s
+\end{document}
