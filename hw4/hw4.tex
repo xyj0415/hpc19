@@ -1,0 +1,58 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+
+\title{High Performance Computing Assignment 4}
+\author{Yijian Xie}
+\date{April 15, 2019}
+
+\begin{document}
+
+\maketitle
+
+\section{Matrix-vector operations on a GPU}
+    I implemented both the vector-vector and matrix-vector multiplication.\\
+    \subsection*{Vector-vector multiplication}
+    The result of GPU version program on TITAN X and TITAN Z were not correct and I did not figure out why. The length of vectors are $2^{25}$.
+    \begin{table}[h!]
+        \begin{tabular}{|c|c|c|c|}
+        \hline
+        CPU & Bandwidth & GPU & Bandwidth \\ \hline
+        Xeon E5-2680 v3 @ 2.50GHz & 27.16GB/s & GTX TITAN Black & 58.76GB/s \\ \hline
+        Xeon E5-2660 v3 @ 2.60GHz & 23.66GB/s & RTX 2080 Ti & 98.07GB/s \\ \hline
+        Xeon Gold 5118 @ 2.30GHz & 9.59GB/s & GTX TITAN V & 389.59GB/s \\ \hline
+        Xeon Gold 5118 @ 2.30GHz & 7.25GB/s & GTX TITAN X & N/A \\ \hline
+        Xeon E5-2650 v2 @ 2.60GHz & 13.40GB/s & GTX TITAN Z & N/A \\ \hline
+        \end{tabular}
+    \end{table}
+    
+    \subsection*{Matrix-vector multiplication}
+    The size of matrix is $2^{11} * 2^{11}$, and the length of vector is $2^{11}$. Because there are $2^{11}$ vector-vector multiplication, the overhead becomes much larger than simply calculate one vector-vector multiplication.
+    \begin{table}[h!]
+        \begin{tabular}{|c|c|c|c|}
+        \hline
+        CPU & Bandwidth & GPU & Bandwidth \\ \hline
+        Xeon E5-2680 v3 @ 2.50GHz & 0.91GB/s & GTX TITAN Black & 0.51GB/s \\ \hline
+        Xeon E5-2660 v3 @ 2.60GHz & 0.08GB/s & RTX 2080 Ti & 0.66GB/s \\ \hline
+        Xeon Gold 5118 @ 2.30GHz & 0.46GB/s & GTX TITAN V & 0.92GB/s \\ \hline
+        Xeon Gold 5118 @ 2.30GHz & 0.004GB/s & GTX TITAN X & 0.012GB/s \\ \hline
+        Xeon E5-2650 v2 @ 2.60GHz & 0.005GB/s & GTX TITAN Z & 0.009GB/s \\ \hline
+        \end{tabular}
+    \end{table}
+    There were significant differences on different servers, maybe due to different workloads on each server.
+\section{2D Jacobi method on a GPU}
+    The size of 2D-matrix is $2000*2000$, and the matrix will be iterated 2000 times.
+    \begin{table}[h!]
+        \begin{tabular}{|c|c|}
+        \hline
+        GPU & Time \\ \hline
+        GTX TITAN Black & 6.67s \\ \hline
+        RTX 2080 Ti & 5.89s \\ \hline
+        GTX TITAN V & 5.80s \\ \hline
+        GTX TITAN X & 8.53s \\ \hline
+        GTX TITAN Z & 11.91s \\ \hline
+        \end{tabular}
+        \end{table}
+\section{Final project}
+    My teammate Wenjun Qu and I will implement the ``Game of Life''. The simple idea is to split the board into $m * n$ pieces and calculate them parallelly, while the information of the edge of each piece needs to be passed via MPI. We are also interested in the circumstances where the board has an irregular shape or the board is formed by triangles or hexagons. 
+\end{document}
