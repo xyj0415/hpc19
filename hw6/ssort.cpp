@@ -30,6 +30,8 @@ int main(int argc, char *argv[]) {
   }
   printf("rank: %d, first entry: %d\n", rank, vec[0]);
 
+  MPI_Barrier(MPI_COMM_WORLD);
+  double tt = MPI_Wtime();
   // sort locally
   std::sort(vec, vec+N);
 
@@ -103,6 +105,8 @@ int main(int argc, char *argv[]) {
   // do a local sort of the received data
   sort(recvbuf, recvbuf + recvbuf_size);
   
+  MPI_Barrier(MPI_COMM_WORLD);
+  cout << "Time:" << MPI_Wtime() - tt << "s" << endl;
   // every process writes its result to a file
   ofstream outfile;
   outfile.open("output" + to_string(rank));
